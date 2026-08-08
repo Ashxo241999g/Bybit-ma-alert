@@ -1,12 +1,10 @@
 name: Bybit MA Alert Bot
 
 on:
+  push:
+  workflow_dispatch:
   schedule:
     - cron: "*/15 * * * *"
-  workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   scan:
@@ -29,11 +27,3 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python bot.py
-
-      - name: Save alert state
-        run: |
-          git config --global user.name "Bybit MA Bot"
-          git config --global user.email "bot@users.noreply.github.com"
-          git add state.json
-          git diff --cached --quiet || git commit -m "Update alert state"
-          git push
